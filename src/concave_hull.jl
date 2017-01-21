@@ -9,7 +9,7 @@ function intersect_line{T<:AbstractVector,S<:AbstractVector}(ls1::NTuple{2,T},ls
     d = cross2d(r,s)
     un = cross2d(qmp,r)
     d == 0.0 && (return un == 0.0)
-    return (0 < un < d) && (0 < cross2d(qmp, s) < d)
+    return (0 < un/d < 1) && (0 < cross2d(qmp, s)/d < 1)
 end
 
 function get_angle(p_pro,p_cur,p_pre)
