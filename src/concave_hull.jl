@@ -8,16 +8,8 @@ function intersect_line{T<:AbstractVector,S<:AbstractVector}(ls1::NTuple{2,T},ls
     qmp = ls2[1]-ls1[1]
     d = cross2d(r,s)
     un = cross2d(qmp,r)
-    if d == 0.0
-        if un == 0.0
-            return true
-        else
-            return false
-        end
-    end
-    u = un/d
-    t = cross2d(qmp,s)/d
-    return u > 0 && u < 1 && t > 0 && t < 1
+    d == 0.0 && (return un == 0.0)
+    return (0 < un < d) && (0 < cross2d(qmp, s) < d)
 end
 
 function get_angle(p_pro,p_cur,p_pre)
@@ -51,9 +43,6 @@ function concave_hull(tree::KDTree, k::Int)
 
     ishull = zeros(Bool,npoints)
     ishull[i0] = true
-    is_hull = function f(i)
-        ishull[i]
-    end
 
     #Initiate hull
     p0 = copy(tree.data[i0])
@@ -73,7 +62,7 @@ function concave_hull(tree::KDTree, k::Int)
         end
 
         kk = clamp(k, 3 , npoints-npick)
-        kind, kdist = knn(tree, p_cur, kk, true, is_hull)
+        kind, kdist = knn(tree, p_cur, kk, true, i -> ishull[i])
         angles = collect(get_angle(tree.data[i], p_cur, p_pre) for i in kind)
         w = sortperm(angles,rev=true)
         inter = true
