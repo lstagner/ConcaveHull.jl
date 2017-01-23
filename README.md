@@ -9,6 +9,7 @@ This package computes the concave/convex hull of a set of points using a nearest
 ## Usage
 
 ```julia
+Pkg.add("ConcaveHull") # Add package
 using ConcaveHull
 using Plots
 
