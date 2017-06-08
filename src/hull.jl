@@ -1,4 +1,4 @@
-type Hull{T<:AbstractVector}
+struct Hull{T<:AbstractVector}
     vertices::Vector{T}
     k::Int
 end

@@ -94,7 +94,7 @@ function concave_hull(tree::KDTree, k::Int)
         nstep = nstep + 1
     end
 
-    if any(~in_hull(p,hull) for p in tree.data[~ishull])
+    if any(~in_hull(p,hull) for p in tree.data[.~(ishull)])
         if k+1 >= npoints
             info("Unable to construct concave hull")
             return hull
