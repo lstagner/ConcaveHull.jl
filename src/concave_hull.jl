@@ -33,10 +33,13 @@ function intersect_hull(ls, hull)
     return false
 end
 
+# In Julia v0.7 and above, indmax cannot be used with generators.
+# In a future version, we should be able to replace this function
+# with Base.argmax(f, itr)
 function indmax_f(f::Function, itr::AbstractVector)
     imax = firstindex(itr)
-    vmax = f(first(itr))
-    for i in (imax+1):lastindex(itr)
+    vmax = f(itr[imax])
+    for i in (firstindex(itr)+1):lastindex(itr)
         v = f(itr[i])
         if v > vmax
             vmax = v
