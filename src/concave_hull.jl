@@ -2,7 +2,7 @@ function cross2d(x,y)
     return x[1]*y[2] - x[2]*y[1]
 end
 
-function intersect_line{T<:AbstractVector,S<:AbstractVector}(ls1::NTuple{2,T},ls2::NTuple{2,S})
+function intersect_line(ls1::NTuple{2,T},ls2::NTuple{2,S}) where {T<:AbstractVector,S<:AbstractVector}
     r = ls1[2] - ls1[1]
     s = ls2[2] - ls2[1]
     qmp = ls2[1]-ls1[1]
@@ -15,7 +15,7 @@ end
 function get_angle(p_pro,p_cur,p_pre)
     r = p_pro - p_cur
     p = p_pre - p_cur
-    t = atan2(cross2d(p,r),dot(p,r))
+    t = atan(cross2d(p,r),dot(p,r))
     return t > 0 ? t : t + 2pi
 end
 
@@ -33,13 +33,26 @@ function intersect_hull(ls, hull)
     return false
 end
 
+function indmax_f(f::Function, itr::AbstractVector)
+    imax = firstindex(itr)
+    vmax = f(first(itr))
+    for i in (imax+1):lastindex(itr)
+        v = f(itr[i])
+        if v > vmax
+            vmax = v
+            imax = i
+        end
+    end
+    imax
+end
+
 function concave_hull(tree::KDTree, k::Int)
     npoints = length(tree.data)
     k = clamp(k, 3, npoints-1)
     hull = Hull(eltype(tree.data), k)
 
     #Start at point with largest x value
-    i0 = indmax(v[1] for v in tree.data)
+    i0 = indmax_f(v -> v[1], tree.data)
 
     ishull = zeros(Bool,npoints)
     ishull[i0] = true
