@@ -2,6 +2,7 @@ module ConcaveHull
 
 using NearestNeighbors
 using RecipesBase
+using LinearAlgebra
 
 include("hull.jl")
 include("concave_hull.jl")

@@ -1,5 +1,5 @@
 using ConcaveHull
-using Base.Test
+using Test
 
 # Triangle
 p = [[-1.0,0.0],[1.0,0.0],[0.0,1.0]]
