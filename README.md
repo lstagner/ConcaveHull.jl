@@ -13,7 +13,7 @@ Pkg.add("ConcaveHull") # Add package
 using ConcaveHull
 using Plots
 
-points = [[th, -sin(th)] .+ (0.4*rand(2) - 0.2) for th in range(0, stop=2pi, length=5000)];
+points = [[th, -sin(th)] .+ (0.4*rand(2) .- 0.2) for th in range(0, stop=2pi, length=5000)];
 x = [p[1] for p in points];
 y = [p[2] for p in points];
 
