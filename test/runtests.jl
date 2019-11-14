@@ -18,6 +18,12 @@ h = concave_hull(p)
 @test Set(h.vertices) == Set(p)
 @test area(h) == 4.0
 
+# Square with multiple points on one side
+p = [[-1.0,0.0], [1.0,0.0], [1.0,0.25], [1.0,0.5], [1.0,0.75],
+     [1.0,1.0], [1.0,1.25], [1.0,1.5], [1.0,1.75], [1.0,2.0], [-1.0,2.0]]
+h = concave_hull(p)
+@test area(h) == 4.0
+
 # Square enclosing point
 p = [[-1.0,0.0],[1.0,0.0],[1.0,2.0],[-1.0,2.0],[0.0,1.0]]
 h = concave_hull(p)

@@ -68,6 +68,7 @@ function concave_hull(tree::KDTree, k::Int)
     p_cur = copy(p0)
     p_pre = p_cur + [1, 0]
     p_pro = copy(p0)
+    d01 = zero(eltype(p0))
 
     nstep = 1
     npick = 1
@@ -76,16 +77,20 @@ function concave_hull(tree::KDTree, k::Int)
             npick = npick - 1
             ishull[i0] = false
         end
-
         kk = clamp(k, 3 , npoints-npick)
         kind, kdist = knn(tree, p_cur, kk, true, i -> ishull[i])
         angles = collect(get_angle(tree.data[i], p_cur, p_pre) for i in kind)
         w = sortperm(angles,rev=true)
         inter = true
         for i in kind[w]
+            #p_pre(0) ---------- d02 --------- p_pro(2)
+            #p_pre(0) --d01-- p_cur(1) --d12-- p_pro(2)
             p_pro = tree.data[i]
-            if ~intersect_hull((p_pro,p_cur),hull)
+            d12 = norm(p_pro - p_cur)
+            d02 = norm(p_pro - p_pre)
+            if ~intersect_hull((p_pro,p_cur),hull) || (d01 + d12) == d02
                 p_pre = p_cur
+                d01 = d12
                 p_cur = tree.data[i]
                 ishull[i] = true
                 inter = false
