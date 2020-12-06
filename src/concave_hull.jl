@@ -129,7 +129,7 @@ end
 function concave_hull(points::Vector, k::Int = 3)
     p = unique(points)
     npoints = length(p)
-    npoints < 3 && throw(ArgumentError("Number of unique points should be greater then 2"))
+    npoints < 3 && throw(ArgumentError("Number of unique points should be greater than 2"))
     npoints == 3 && return Hull(points,k)
     tree = KDTree(hcat(points...),reorder=false)
     return concave_hull(tree, k)
