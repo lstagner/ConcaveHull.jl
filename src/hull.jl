@@ -10,32 +10,28 @@ function is_left(p0,p1,p2)
     return ((p1[1] - p0[1]) * (p2[2] - p0[2]) - (p2[1] -  p0[1]) * (p1[2] - p0[2]))
 end
 
-function in_hull(p,hull::Hull)
-
-    v = copy(hull.vertices)
-    push!(v,hull.vertices[1])
-    nv = length(v)
+function in_hull(p, hull::Hull)
     wn = 0
-    @inbounds for i = 1:nv-1
-        if v[i][2] <= p[2]
-            if v[i+1][2] > p[2]
-                if is_left(v[i],v[i+1],p) > 0.0
-                    wn = wn +1
+    nv = length(hull.vertices)
+    @inbounds for i = 1:nv
+        current = hull.vertices[i]
+        next = hull.vertices[mod1(i + 1, nv)]
+        if current[2] <= p[2]
+            if next[2] > p[2]
+                if is_left(current, next, p) > 0.0
+                    wn += 1
                 end
             end
         else
-            if v[i+1][2] <= p[2]
-                if is_left(v[i],v[i+1],p) < 0.0
-                    wn = wn - 1
+            if next[2] <= p[2]
+                if is_left(current, next, p) < 0.0
+                    wn -= 1
                 end
             end
         end
     end
-    if wn == 0
-        return false
-    else
-        return true
-    end
+
+    return wn != 0
 end
 
 function signed_area(h::Hull)
