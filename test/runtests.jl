@@ -7,6 +7,8 @@ h = concave_hull(p)
 @test Set(h.vertices) == Set(p)
 @test h.converged
 @test area(h) == 0.5*2
+@test in_hull([0.0,0.5], h)
+@test !in_hull([3.0, 3.0], h)
 
 # Triangle enclosing point
 p = [[-1.0,0.0],[1.0,0.0],[0.0,1.0],[0.0,0.5]]
